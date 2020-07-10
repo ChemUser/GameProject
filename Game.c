@@ -18,7 +18,8 @@ int main()
 {
     //setting variables
     char a;
-    //char territory[49][62];
+    char messgbuffer[100];
+    char territory[49][62];
     char resources[49][62];
     char people[49][62];
 
@@ -74,18 +75,20 @@ int main()
 
     Newgame:
 
+    newmap:
+
     //making game field markup
     for(b=0;b<62;b++)
     {
         if(b>=0&&b<=9)
         {
-            //territory[0][b]=b+48;
+            territory[0][b]=b+48;
             resources[0][b]=b+48;
             people[0][b]=b+48;
 
             if(b<49)
             {
-                //territory[b][0]=b+48;
+                territory[b][0]=b+48;
                 resources[b][0]=b+48;
                 people[b][0]=b+48;
             }
@@ -93,13 +96,13 @@ int main()
 
         if(b>=10&&b<=35)
         {
-            //territory[0][b]=b+87;
+            territory[0][b]=b+87;
             resources[0][b]=b+87;
             people[0][b]=b+87;
 
             if(b<49)
             {
-                //territory[b][0]=b+87;
+                territory[b][0]=b+87;
                 resources[b][0]=b+87;
                 people[b][0]=b+87;
             }
@@ -107,13 +110,13 @@ int main()
 
         if(b>=36&&b<=61)
         {
-            //territory[0][b]=b+29;
+            territory[0][b]=b+29;
             resources[0][b]=b+29;
             people[0][b]=b+29;
 
             if(b<49)
             {
-                //territory[b][0]=b+29;
+                territory[b][0]=b+29;
                 resources[b][0]=b+29;
                 people[b][0]=b+29;
             }
@@ -122,13 +125,13 @@ int main()
 
     for(b=1;b<62;b++)
     {
-        //territory[1][b]='-';
+        territory[1][b]='-';
         resources[1][b]='-';
         people[1][b]='-';
 
         if(b>=2&&b<49)
         {
-            //territory[b][1]='|';
+            territory[b][1]='|';
             resources[b][1]='|';
             people[b][1]='|';
         }
@@ -152,7 +155,7 @@ int main()
         label:
             dot_x=rand()%60+2;
             dot_y=rand()%47+2;
-        if(resources[dot_y][dot_x]=='#')
+        if(territory[dot_y][dot_x]=='#')
         {
             goto label;
         }
@@ -165,6 +168,7 @@ int main()
             {
                 resources[dot_y][d+dot_x]='#';
                 people[dot_y][d+dot_x]='#';
+                territory[dot_y][d+dot_x]='#';
             }
             dot_y++;
             if(dot_x==2)
@@ -191,7 +195,26 @@ int main()
             }
         }
     }
-    show(resources);
+    dot_x=0;
+    dot_y=0;
+
+    do //in this do{} while(); loop we send first colonists squad at the random position on the continent or island
+    {
+        dot_x=rand()%61+2;
+        dot_y=rand()%47+2;
+    }
+    while(people[dot_y][dot_x]!='#');
+
+    people[dot_y][dot_x]='!';
+    show(people);
+    printf("\n");
+    scanf("%s",&messgbuffer);
+    if(strspn(messgbuffer,"New")==3)
+    {
+        printf("\n");
+        goto newmap;
+    }
+
     q:
         return 0;
 }
