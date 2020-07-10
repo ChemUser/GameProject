@@ -18,12 +18,15 @@ int main()
 {
     //setting variables
     char a;
-    char territory[49][62];
+    //char territory[49][62];
     char resources[49][62];
     char people[49][62];
 
-    int b,c;
-
+    int b,c,d,e;
+    int island_num;
+    int line_num;
+    int dot_num;
+    int dot_x,dot_y;
 
 
     //displaying start menu
@@ -40,66 +43,7 @@ int main()
     {
         case '1':
         {
-            //making game field markup
-            for(b=0;b<62;b++)
-            {
-                if(b>=0&&b<=9)
-                {
-                    territory[0][b]=b+48;
-                    resources[0][b]=b+48;
-                    people[0][b]=b+48;
-
-                    if(b<49)
-                    {
-                        territory[b][0]=b+48;
-                        resources[b][0]=b+48;
-                        people[b][0]=b+48;
-                    }
-                }
-
-                if(b>=10&&b<=35)
-                {
-                    territory[0][b]=b+87;
-                    resources[0][b]=b+87;
-                    people[0][b]=b+87;
-
-                    if(b<49)
-                    {
-                        territory[b][0]=b+87;
-                        resources[b][0]=b+87;
-                        people[b][0]=b+87;
-                    }
-                }
-
-                if(b>=36&&b<=61)
-                {
-                    territory[0][b]=b+29;
-                    resources[0][b]=b+29;
-                    people[0][b]=b+29;
-
-                    if(b<49)
-                    {
-                        territory[b][0]=b+29;
-                        resources[b][0]=b+29;
-                        people[b][0]=b+29;
-                    }
-                }
-            }
-
-            for(b=1;b<62;b++)
-            {
-                territory[1][b]='-';
-                resources[1][b]='-';
-                people[1][b]='-';
-
-                if(b>=2&&b<49)
-                {
-                    territory[b][1]='|';
-                    resources[b][1]='|';
-                    people[b][1]='|';
-                }
-            }
-            //end making game field markup
+            goto Newgame;
         }
         break;
 
@@ -123,11 +67,131 @@ int main()
 
         case '5':
         {
-                goto q;
+            goto q;
         }
         break;
     }
 
+    Newgame:
+
+    //making game field markup
+    for(b=0;b<62;b++)
+    {
+        if(b>=0&&b<=9)
+        {
+            //territory[0][b]=b+48;
+            resources[0][b]=b+48;
+            people[0][b]=b+48;
+
+            if(b<49)
+            {
+                //territory[b][0]=b+48;
+                resources[b][0]=b+48;
+                people[b][0]=b+48;
+            }
+        }
+
+        if(b>=10&&b<=35)
+        {
+            //territory[0][b]=b+87;
+            resources[0][b]=b+87;
+            people[0][b]=b+87;
+
+            if(b<49)
+            {
+                //territory[b][0]=b+87;
+                resources[b][0]=b+87;
+                people[b][0]=b+87;
+            }
+        }
+
+        if(b>=36&&b<=61)
+        {
+            //territory[0][b]=b+29;
+            resources[0][b]=b+29;
+            people[0][b]=b+29;
+
+            if(b<49)
+            {
+                //territory[b][0]=b+29;
+                resources[b][0]=b+29;
+                people[b][0]=b+29;
+            }
+        }
+    }
+
+    for(b=1;b<62;b++)
+    {
+        //territory[1][b]='-';
+        resources[1][b]='-';
+        people[1][b]='-';
+
+        if(b>=2&&b<49)
+        {
+            //territory[b][1]='|';
+            resources[b][1]='|';
+            people[b][1]='|';
+        }
+    }
+
+    for(b=2;b<49;b++)
+    {
+        for(c=2;c<62;c++)
+        {
+            resources[b][c]='~';
+            people[b][c]='~';
+        }
+    }
+    //end making game field markup
+
+    //generating random islands
+    srand(time(NULL));
+    island_num=rand()%6+5;//number of islands can be from 2 to 10
+    for(b=0;b<island_num;b++)
+    {
+        label:
+            dot_x=rand()%60+2;
+            dot_y=rand()%47+2;
+        if(resources[dot_y][dot_x]=='#')
+        {
+            goto label;
+        }
+
+        line_num=rand()%(49-dot_y);
+        for(c=0;c<line_num;c++)
+        {
+            dot_num=rand()%(62-dot_x);
+            for(d=0;d<dot_num;d++)
+            {
+                resources[dot_y][d+dot_x]='#';
+                people[dot_y][d+dot_x]='#';
+            }
+            dot_y++;
+            if(dot_x==2)
+            {
+                if(d+dot_x==61)
+                {
+                    dot_x=rand()%60+2;
+                }
+                else
+                {
+                    dot_x=rand()%(d+dot_x-1)+2;
+                }
+            }
+            else
+            {
+                if(d+dot_x==61)
+                {
+                    dot_x=rand()%(63-dot_x)+dot_x-1;
+                }
+                else
+                {
+                    dot_x=rand()%(d+dot_x-1)+2;
+                }
+            }
+        }
+    }
+    show(resources);
     q:
         return 0;
 }
